@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import Modelo.*;
+import java.util.List;
 
 /**
  *
@@ -32,21 +34,32 @@ public class ServletProductos extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try {
             /* TODO output your page here. You may use following sample code. */
-            ProductosCRUD.destroyProducto(3);
+            //ProductosCRUD.destroyProducto(3);
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet ServletProductos</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ServletProductos at " + request.getContextPath() + "</h1>");
+            out.println("<h1>He comentado la línea que hace borrar el producto.</h1>");
+            List<Productos> misProductos = ProductosCRUD.getProductos();
+            for(Productos p: misProductos){
+                out.println("Nombre ->" + p.getNombre() + "<br>");
+                out.println("Categoría ->" + p.getCategoria() + "<br>");
+                out.println("Precio ->" + p.getPrecio());
+                out.println("<hr>");
+            }
+            Productos miProducto = new Productos();
+            miProducto.setId(10);
+            miProducto.setNombre("Tarta de limon");
+            miProducto.setImagen("tarta.jpg");
+            miProducto.setCategoria("postres");
+            miProducto.setPrecio(6.0f);
+            ProductosCRUD.actualizaProducto(miProducto);
+            ProductosCRUD.insertaProducto();
             out.println("</body>");
             out.println("</html>");
-        } finally {
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

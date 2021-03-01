@@ -48,7 +48,7 @@ public class Productos implements Serializable {
     private String nombre;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 60)
+    @Size(min = 0, max = 60)
     @Column(name = "imagen")
     private String imagen;
     @Basic(optional = false)
