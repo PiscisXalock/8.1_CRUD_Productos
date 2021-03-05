@@ -24,33 +24,33 @@ public class ProductosCRUD {
         manager.getTransaction().commit();
         return filasAfectadas;
     }
-    
-    public static int actualizarProductoTest(){
+
+    public static int actualizarProductoTest() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
         String sql = "UPDATE Productos p SET p.categoria = 'zumos' WHERE p.id = 13";
-        Query q = manager.createQuery(sql,Productos.class);
+        Query q = manager.createQuery(sql, Productos.class);
         manager.getTransaction().begin();
         int filasAfectadas = q.executeUpdate();
         manager.getTransaction().commit();
         //manager.close();
         return filasAfectadas;
     }
-    
-    public static List<Productos> getProductos(){
+
+    public static List<Productos> getProductos() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
         String sql = "SELECT * FROM productos";
-        Query q = manager.createNativeQuery(sql,Productos.class); //Método para consultas SQL
+        Query q = manager.createNativeQuery(sql, Productos.class); //Método para consultas SQL
         List<Productos> productosBD = q.getResultList();
         return productosBD;
     }
-    
-    public static int actualizarProducto(){
+
+    public static int actualizarProducto() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
         String sql = "UPDATE Productos p SET p.nombre = :nombre, p.imagen = :imagen, p.categoria = :categoria, p.precio = :precio, WHERE p.id = 10";
-        Query q = manager.createQuery(sql,Productos.class);
+        Query q = manager.createQuery(sql, Productos.class);
         q.setParameter("categoria", "Digestivos");
         q.setParameter("nombre", "Pacharán");
         q.setParameter("imagen", "pacharan.jpg");
@@ -61,12 +61,12 @@ public class ProductosCRUD {
         // manager.close();
         return filasAfectadas;
     }
-    
-    public static int actualizaProducto(Productos miProducto){
+
+    public static int actualizaProducto(Productos miProducto) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
         String sql = "UPDATE Productos p SET p.nombre = :nombre, p.imagen = :imagen, p.categoria = :categoria, p.precio = :precio, p.id = :id WHERE p.id = 10";
-        Query q = manager.createQuery(sql,Productos.class);
+        Query q = manager.createQuery(sql, Productos.class);
         q.setParameter("id", miProducto.getId());
         q.setParameter("categoria", miProducto.getCategoria());
         q.setParameter("nombre", miProducto.getNombre());
@@ -75,11 +75,11 @@ public class ProductosCRUD {
         manager.getTransaction().begin();
         int filasAfectadas = q.executeUpdate();
         manager.getTransaction().commit();
-        // manager.close();
+        manager.close();
         return filasAfectadas;
     }
-    
-    public static void insertaProducto(){
+
+    public static void insertaProducto() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
         manager.getTransaction().begin();
@@ -88,6 +88,15 @@ public class ProductosCRUD {
         producto.setPrecio(10);
         producto.setImagen("espinacas.jpg");
         producto.setCategoria("complementos");
+        manager.merge(producto);
+        manager.getTransaction().commit();
+    }
+
+    public static void insertarProducto(Productos producto) {
+        EntityManagerFactory factory
+                = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
+        EntityManager manager = factory.createEntityManager();
+        manager.getTransaction().begin();
         manager.merge(producto);
         manager.getTransaction().commit();
     }

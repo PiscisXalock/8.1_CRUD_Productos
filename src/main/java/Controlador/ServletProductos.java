@@ -34,32 +34,48 @@ public class ServletProductos extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-            /* TODO output your page here. You may use following sample code. */
-            //ProductosCRUD.destroyProducto(3);
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletProductos</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>He comentado la línea que hace borrar el producto.</h1>");
+        String op = request.getParameter("op");
+        /* TODO output your page here. You may use following sample code. */
+        //ProductosCRUD.destroyProducto(3);
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Servlet ServletProductos</title>");
+        out.println("</head>");
+        out.println("<body>");
+        //out.println("<h1>He comentado la línea que hace borrar el producto.</h1>");
+        if (op.equals("listar")) {
+            out.println("<h1>Listar</h1>");
             List<Productos> misProductos = ProductosCRUD.getProductos();
-            for(Productos p: misProductos){
+            request.setAttribute("misProductos", misProductos);
+            request.getRequestDispatcher("listar.jsp").forward(request, response);
+            /*for (Productos p : misProductos) {
                 out.println("Nombre ->" + p.getNombre() + "<br>");
                 out.println("Categoría ->" + p.getCategoria() + "<br>");
                 out.println("Precio ->" + p.getPrecio());
                 out.println("<hr>");
-            }
+            }*/
+        } else if (op.equals("insert1")) {
+            request.getRequestDispatcher("insert.jsp").forward(request, response);
+        } else if (op.equals("insert2")) {
             Productos miProducto = new Productos();
-            miProducto.setId(10);
-            miProducto.setNombre("Tarta de limon");
-            miProducto.setImagen("tarta.jpg");
-            miProducto.setCategoria("postres");
-            miProducto.setPrecio(6.0f);
-            ProductosCRUD.actualizaProducto(miProducto);
-            ProductosCRUD.insertaProducto();
-            out.println("</body>");
-            out.println("</html>");
+            miProducto.setNombre(request.getParameter("nombre"));
+            miProducto.setImagen(request.getParameter("imagen"));
+            miProducto.setCategoria(request.getParameter("categoria"));
+            miProducto.setPrecio(Float.parseFloat(request.getParameter("precio")));
+            ProductosCRUD.insertarProducto(miProducto);
+            out.println("<h1>Registro insertado " + "<a href='index.jsp'>Volver</a></h1>");
+        } else if(op.equals("borrar")){
+            int id = Integer.parseInt(request.getParameter("id"));
+            if(ProductosCRUD.destroyProducto(id) == 1){
+                out.println("<h1>Registro borrado <a href='index.jsp'>Volver</a></h1>");
+            }else{
+                out.println("<h1>Registro no borrado <a href='listar.jsp'>Volver</a></h1>");
+            }
+            
+        }
+        out.println("</body>");
+        out.println("</html>");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
