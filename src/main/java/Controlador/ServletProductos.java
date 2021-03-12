@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class ServletProductos extends HttpServlet {
 
+    private int id;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,15 +66,44 @@ public class ServletProductos extends HttpServlet {
             miProducto.setCategoria(request.getParameter("categoria"));
             miProducto.setPrecio(Float.parseFloat(request.getParameter("precio")));
             ProductosCRUD.insertarProducto(miProducto);
-            out.println("<h1>Registro insertado " + "<a href='index.jsp'>Volver</a></h1>");
-        } else if(op.equals("borrar")){
-            int id = Integer.parseInt(request.getParameter("id"));
-            if(ProductosCRUD.destroyProducto(id) == 1){
-                out.println("<h1>Registro borrado <a href='index.jsp'>Volver</a></h1>");
-            }else{
-                out.println("<h1>Registro no borrado <a href='listar.jsp'>Volver</a></h1>");
+            request.setAttribute("info", "Producto insertado correctamente.");
+            List<Productos> misProductos = ProductosCRUD.getProductos();
+            request.setAttribute("misProductos", misProductos);
+            request.getRequestDispatcher("listar.jsp").forward(request, response);
+        } else if (op.equals("borrar")) {
+            id = Integer.parseInt(request.getParameter("id"));
+            if (ProductosCRUD.destroyProducto(id) == 1) {
+                request.setAttribute("info", "Producto borrado correctamente.");
+                List<Productos> misProductos = ProductosCRUD.getProductos();
+                request.setAttribute("misProductos", misProductos);
+                request.getRequestDispatcher("listar.jsp").forward(request, response);
+            } else {
+                request.setAttribute("info", "El producto no se borro correctamente.");
+                List<Productos> misProductos = ProductosCRUD.getProductos();
+                request.setAttribute("misProductos", misProductos);
+                request.getRequestDispatcher("listar.jsp").forward(request, response);
             }
-            
+
+        } else if (op.equals("update1")) {
+            id = Integer.parseInt(request.getParameter("id"));
+            Productos miProducto = ProductosCRUD.getProducto(id);
+            request.setAttribute("miProducto", miProducto);
+            request.getRequestDispatcher("update.jsp").forward(request, response);
+        } else if (op.equals("update2")) {
+            id = Integer.parseInt(request.getParameter("id"));
+            String nombre = request.getParameter("nombre");
+            String imagen = request.getParameter("imagen");
+            String categoria = request.getParameter("categoria");
+            Float precio = Float.parseFloat(request.getParameter("precio"));
+            Productos miProducto = new Productos(id, nombre, imagen, categoria, precio);
+            ProductosCRUD.insertarProducto(miProducto);
+            request.setAttribute("info", "Producto actualizado correctamente.");
+            List<Productos> misProductos = ProductosCRUD.getProductos();
+            request.setAttribute("misProductos", misProductos);
+            request.getRequestDispatcher("listar.jsp").forward(request, response);
+            /*int filas = ProductosCRUD.actualizaProducto(miProducto);
+            request.setAttribute("miProducto", miProducto);
+            request.getRequestDispatcher("listar.jsp").forward(request, response);*/
         }
         out.println("</body>");
         out.println("</html>");

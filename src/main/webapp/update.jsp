@@ -1,9 +1,10 @@
 <%-- 
-    Document   : insert
-    Created on : 05-mar-2021, 20:36:09
-    Author     : DAW-A
+    Document   : update
+    Created on : 08-mar-2021, 19:46:38
+    Author     : Usuario
 --%>
 
+<%@page import="Modelo.Productos"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,14 +17,18 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </head>
     <body>
-        <h1>Nuevo producto</h1>
+        <%
+            Productos miProducto = (Productos) request.getAttribute("miProducto");
+        %>
+        <h1>Actualizar producto</h1>
         <div class="form-group">
-            <form action="ServletProductos?op=insert2" method="get">
-                <p><label>Nombre: <input class="form-control" type="text" name="nombre" required > </label></p>
-                <p><label>Imagen: <input class="form-control" type="text" name="imagen" required > </label></p>
-                <p><label>Categoría: <input class="form-control" type="text" name="categoria" required > </label></p>
-                <p><label>Precio: <input class="form-control" type="text" name="precio" required > </label></p>
-                <input hidden type="text" name="op" required value="insert2">
+            <form action="ServletProductos" method="get">
+                <p><label>Nombre: <input class="form-control" value="<%= miProducto.getNombre()%>" type="text" name="nombre" required > </label></p>
+                <p><label>Imagen: <input class="form-control" value="${miProducto.imagen}" type="text" name="imagen" required > </label></p>
+                <p><label>Categoría: <input class="form-control" value="${ miProducto.categoria}" type="text" name="categoria" required > </label></p>
+                <p><label>Precio: <input class="form-control" value="${miProducto.precio}" type="text" name="precio" required > </label></p>
+                <input hidden type="number" name="id" required value="${miProducto.id}">
+                <input hidden type="text" name="op" required value="update2">
                 <input class="btn btn-primary" type="submit" value="insertar" >
             </form>
         </div>

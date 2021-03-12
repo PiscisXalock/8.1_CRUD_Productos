@@ -46,6 +46,16 @@ public class ProductosCRUD {
         return productosBD;
     }
 
+    public static Productos getProducto(int id) {
+        EntityManagerFactory factory
+                = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
+        EntityManager manager = factory.createEntityManager();
+        String sql =  "SELECT p FROM Productos p WHERE p.id = " + id;
+        Query q = manager.createQuery(sql, Productos.class); //método para consultas en JPQL
+        Productos productosBD = (Productos) q.getSingleResult();
+        return productosBD;
+    }
+
     public static int actualizarProducto() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
@@ -63,9 +73,10 @@ public class ProductosCRUD {
     }
 
     public static int actualizaProducto(Productos miProducto) {
+        int id_producto = miProducto.getId();
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("com.mycompany_8.1_CRUD_Productos_war_1.0-SNAPSHOTPU");
         EntityManager manager = factory.createEntityManager();
-        String sql = "UPDATE Productos p SET p.nombre = :nombre, p.imagen = :imagen, p.categoria = :categoria, p.precio = :precio, p.id = :id WHERE p.id = 10";
+        String sql = "UPDATE Productos p SET p.nombre = :nombre, p.imagen = :imagen, p.categoria = :categoria, p.precio = :precio, p.id = :id WHERE p.id = " + id_producto;
         Query q = manager.createQuery(sql, Productos.class);
         q.setParameter("id", miProducto.getId());
         q.setParameter("categoria", miProducto.getCategoria());
